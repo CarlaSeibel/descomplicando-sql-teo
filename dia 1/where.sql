@@ -20,12 +20,22 @@ AND YEAR(dtPedido) = '2018'
 
 SELECT ((1+10)*2)
 
+-- nota: pra garantir que 
+
 
 -- COMMAND ----------
 
-SELECT *
+SELECT * 
 FROM silver_olist.pedido
-WHERE descSituacao IN 'shipped', 'canceled'
-AND YEAR(dtPedido) = '2018'
+LIMIT 10
 
--- leia-se: selecione todas as colunas da tabela silver_olist.pedido filtrando pedidos que tenham situação é entregue ou cancelado e o ano da data do pedido seja 2018.
+-- COMMAND ----------
+
+SELECT *,
+       DATEDIFF(dtEstimativaEntrega, dtAprovado) AS dtDiffEstimativaAprovacao
+FROM silver_olist.pedido
+WHERE descSituacao IN ('shipped', 'canceled')
+AND YEAR(dtPedido) = '2018'
+AND DATEDIFF(dtEstimativaEntrega, dtAprovado) > 30
+
+-- leia-se: selecione todas as colunas da tabela silver_olist.pedido filtrando pedidos que tenham situação é entregue ou cancelado e o ano da data do pedido seja 2018 e a diferença entre aprovação do pedido e estimativa de entrega é maior que 30 dias.
